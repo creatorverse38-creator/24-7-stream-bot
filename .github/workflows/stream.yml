@@ -1,4 +1,4 @@
-name: 24-7 Twitch Stream Fixed
+name: 24-7 Twitch Loop Stream
 
 on:
   workflow_dispatch:
@@ -9,14 +9,14 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Install FFmpeg
         run: |
           sudo apt update
           sudo apt install ffmpeg -y
 
-      - name: Start Stream Loop
+      - name: Start Infinite Loop Stream
         run: |
           while true; do
             echo "Starting stream..."
@@ -25,6 +25,6 @@ jobs:
             -c:v libx264 -preset veryfast -pix_fmt yuv420p \
             -c:a aac -f flv "rtmp://live.twitch.tv/live/live_1514467365_A8v39T48ABrimAAHeSaMcHQ3Z8DY6E"
 
-            echo "Restarting in 10 seconds..."
+            echo "Stream stopped → restarting in 10 seconds..."
             sleep 10
           done
