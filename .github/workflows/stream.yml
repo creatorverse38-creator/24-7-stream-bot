@@ -1,0 +1,28 @@
+name: 24-7 Twitch Auto Stream
+
+on:
+  workflow_dispatch:
+
+jobs:
+  stream:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install FFmpeg
+        run: sudo apt update && sudo apt install ffmpeg -y
+
+      - name: Start Twitch Loop Stream (Auto Restart)
+        run: |
+          while true; do
+            echo "Starting Twitch stream..."
+
+            ffmpeg -re -stream_loop -1 -i video.mp4 -i music.mp3 \
+            -c:v libx264 -preset veryfast -pix_fmt yuv420p \
+            -c:a aac -f flv "rtmp://live.twitch.tv/live/live_1514467365_A8v39T48ABrimAAHeSaMcHQ3Z8DY6E"
+
+            echo "Stream stopped/crashed → restarting in 10 seconds..."
+            sleep 10
+          done
